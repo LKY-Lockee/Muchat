@@ -23,6 +23,7 @@ defineProps({
   width: v-bind(width);
   min-width: v-bind(width);
   max-width: v-bind(width);
+  pointer-events: none;
 
   &[left] {
     justify-content: flex-start;

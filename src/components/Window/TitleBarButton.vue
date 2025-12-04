@@ -16,6 +16,7 @@
   user-select: none;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  pointer-events: auto;
 
   &[square] {
     width: calc(var(--title-bar-height) - 8px);

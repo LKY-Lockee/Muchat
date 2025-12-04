@@ -1,10 +1,11 @@
 <template>
-  <a :href="props.href" target="_blank" style="display: flex">
+  <a :href="props.href" class="app-no-drag" target="_blank" style="display: flex">
     <SVGOpen :color="props.color" :width="props.width" :height="props.height" />
   </a>
 </template>
 
 <script setup lang="ts" name="OpenLink">
+// SVG
 import SVGOpen from '@/svg/SVGOpen.vue'
 
 const props = defineProps({

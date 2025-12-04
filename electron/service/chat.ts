@@ -1,25 +1,6 @@
+import { Message } from '&/character'
 import OpenAI from 'openai'
-import type {
-  ResponseFormatJSONObject,
-  ResponseFormatJSONSchema,
-} from 'openai/resources/index.mjs'
-
-export interface CharacterMessage {
-  message: string
-  next_trigger: string
-}
-
-export interface UserMessage{
-  time: string
-  message: string
-}
-
-export interface Message {
-  role: 'system' | 'user' | 'assistant'
-  content: string
-  id?: string
-  thinkFolded?: boolean
-}
+import type { ResponseFormatJSONObject, ResponseFormatJSONSchema } from 'openai/resources/index.mjs'
 
 export class OpenAIChat {
   apiURL: string

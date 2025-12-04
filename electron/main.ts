@@ -1,6 +1,8 @@
-import { app, BrowserWindow, shell } from 'electron'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { app, BrowserWindow, shell } from 'electron'
+
+import '#/ipc.ts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
@@ -44,14 +46,13 @@ async function createWindow() {
       height: 36,
     },
 
-    // TODO: Wait for electron to fix the issue with transparent background
-    // backgroundMaterial: 'mica',
-    backgroundColor: '#eff4f9',
+    backgroundMaterial: 'mica',
 
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
       webSecurity: false,
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   })
 

@@ -4,7 +4,7 @@
       class="scroll_view_content"
       :style="
         {
-          padding: `${props.paddingTopBottom} ${props.paddingLeftRight}`,
+          padding: props.padding,
           display: props.display,
           flexDirection: props.flexDirection,
           gap: props.gap,
@@ -17,16 +17,13 @@
 </template>
 
 <script setup lang="ts" name="ScrollView">
+// VUE
 import { ref, type CSSProperties } from 'vue'
 
 const props = defineProps({
-  paddingTopBottom: {
+  padding: {
     type: String,
-    default: '0px',
-  },
-  paddingLeftRight: {
-    type: String,
-    default: '0px',
+    default: '0',
   },
   display: {
     type: String,

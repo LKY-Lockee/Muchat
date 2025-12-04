@@ -7,12 +7,15 @@
       role="textbox"
       @input="onInput"
       :placeholder="props.placeholder"
+      :style="{ minHeight: props.minHeight }"
     />
   </ScrollView>
 </template>
 
 <script setup lang="ts" name="InputArea">
+// VUE
 import { nextTick, ref, watch, onMounted } from 'vue'
+// Components
 import ScrollView from './ScrollView.vue'
 
 const props = defineProps({
@@ -24,6 +27,11 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  minHeight: {
+    type: String,
+    default: '40px',
+  },
+  padding: String,
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -61,18 +69,16 @@ onMounted(() => {
 <style scoped>
 .text_input {
   display: inline-block;
-  font-family: system-ui, sans-serif, Arial;
   border: none;
   outline: none;
-  padding: 16px;
   box-sizing: border-box;
-  font-size: 16px;
   overflow: auto;
+
+  padding: v-bind('props.padding');
 }
 
 .text_input:empty::before {
   content: attr(placeholder);
-  font-size: 16px;
   color: #aaaaaa;
   cursor: text;
 }

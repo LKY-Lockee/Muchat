@@ -1,18 +1,13 @@
 <template>
   <div class="settings_container">
-    <ScrollView
-      class="settings_sidebar"
-      padding-top-bottom="15px"
-      padding-left-right="11px"
-      gap="10px"
-    >
+    <ScrollView class="settings_sidebar" padding="15px 4px" gap="8px">
       <RouterLink
         v-for="category in settingCategories"
         :key="category.id"
         :to="{ path: `/settings/${category.route}` }"
         v-slot="{ isActive }"
       >
-        <div class="nav_item" :class="{ on: isActive }">
+        <div class="nav_item no-select" :class="{ on: isActive }">
           <component :is="category.icon" width="22" height="22" />
           <span>{{ category.name }}</span>
         </div>
@@ -24,12 +19,14 @@
 </template>
 
 <script setup lang="ts" name="SettingsView">
+// VUE
+import { markRaw, ref } from 'vue'
+// SVG
 import SVGAgent from '@/svg/SVGAgent.vue'
 import SVGAbout from '@/svg/SVGAbout.vue'
-
-import AnimatedRouterView from '@/components/Window/AnimatedRouterView.vue'
+// Components
 import ScrollView from '@/components/General/ScrollView.vue'
-import { markRaw, ref } from 'vue'
+import AnimatedRouterView from '@/components/Window/AnimatedRouterView.vue'
 
 const settingCategories = ref([
   {
@@ -55,7 +52,7 @@ const settingCategories = ref([
 
 .settings_sidebar {
   width: 240px;
-  border-right: 1px solid #dddddd;
+  border-right: var(--default-border-1);
   display: flex;
   flex-direction: column;
 }
@@ -63,66 +60,40 @@ const settingCategories = ref([
 .nav_item {
   width: 100%;
   height: 45px;
-  border: solid 1px transparent;
-  border-radius: 8px;
-  box-sizing: border-box;
-  user-select: none;
   cursor: pointer;
   display: flex;
-  justify-content: center;
   align-items: center;
   color: #000000;
-  transition-property: background-color border box-shadow;
-  transition-duration: 0.15s;
-  transition-timing-function: ease-in-out;
-
+  transition: all 0.2s ease-in-out;
   padding-left: 16px;
   justify-content: flex-start;
 
+  border-radius: var(--settings-tab-border-radius);
+
   &.on {
-    background-color: #ffffff !important;
-    border: solid 1px #e0e0e0;
-    box-shadow: 0 4px 12px #00000014;
-  }
-
-  &.bottom-border.on {
-    border: solid 1px #e0e0e0;
-    border-bottom: solid 3px var(--theme-blue);
-  }
-
-  &.left-border.on {
-    border: solid 1px #e0e0e0;
-    border-left: solid 3px var(--theme-blue);
+    background-color: var(--settings-tab-color-on);
   }
 
   &:hover {
-    background-color: #fafafa !important;
-    box-shadow: 0 4px 12px #00000014;
-  }
-
-  &.left-border:hover {
-    border-left: solid 2px var(--theme-orange);
-  }
-
-  &.bottom-border:hover {
-    border-bottom: solid 2px var(--theme-orange);
+    background-color: var(--settings-tab-color-hover);
   }
 
   &:active {
-    background-color: #f2f2f2 !important;
-    box-shadow: 0 6px 16px #0000001a;
-  }
-
-  &.left-border:active {
-    border-left: solid 4px var(--theme-orange);
-  }
-
-  &.bottom-border:active {
-    border-bottom: solid 4px var(--theme-orange);
+    background-color: var(--settings-tab-color-active);
   }
 
   svg {
     margin-right: 8px;
   }
+}
+</style>
+
+<style>
+:root {
+  --settings-tab-border-radius: 5px;
+
+  --settings-tab-color-on: #00000016;
+  --settings-tab-color-hover: #00000024;
+  --settings-tab-color-active: #00000032;
 }
 </style>

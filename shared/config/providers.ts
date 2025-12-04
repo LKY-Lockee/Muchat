@@ -1,29 +1,9 @@
 import LMStudioIcon from '@/assets/providers/lmstudio.png'
 import DeepseekIcon from '@/assets/providers/deepseek.png'
 import AliyunbailianIcon from '@/assets/providers/aliyunbailian.png'
+import { Provider } from '&/provider'
 
-export interface Provider {
-  id: string
-  name: string
-  icon: string
-  websites: {
-    official: string
-    apiKey?: string
-  }
-  type: string
-  url: string
-  apiKey?: string
-  models?: Model[]
-}
-
-export interface Model {
-  id: string
-  object: string
-  owned_by: string
-  provider: string
-}
-
-const providers: Provider[] = [
+export const providers: Provider[] = [
   {
     id: 'lmstudio',
     name: 'LM Studio',
@@ -36,7 +16,7 @@ const providers: Provider[] = [
   },
   {
     id: 'deepseek',
-    name: 'Deepseek',
+    name: 'DeepSeek',
     icon: DeepseekIcon,
     websites: {
       official: 'https://deepseek.com/',
@@ -57,5 +37,3 @@ const providers: Provider[] = [
     url: 'https://dashscope.aliyuncs.com/compatible-mode',
   },
 ]
-
-export default providers

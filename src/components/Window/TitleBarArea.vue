@@ -15,6 +15,7 @@
   align-items: center;
   width: 100%;
   padding-right: 138px;
+  pointer-events: none;
 
   height: var(--title-bar-height);
   padding-left: var(--sidebar-width);

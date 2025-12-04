@@ -7,7 +7,7 @@
       </template>
       <template #front>
         <RouterLink
-          :to="{ path: '/' }"
+          :to="{ path: '/chat/messages' }"
           v-slot="{ isActive }"
           v-tooltip="{
             value: '消息',
@@ -20,7 +20,7 @@
           </SideBarButton>
         </RouterLink>
         <RouterLink
-          :to="{ path: '/chat' }"
+          :to="{ path: '/chat/friends' }"
           v-slot="{ isActive }"
           v-tooltip="{
             value: '角色',
@@ -54,22 +54,29 @@
 </template>
 
 <script setup lang="ts" name="App">
+// SVG
+import SVGIcon from '@/svg/SVGIcon.vue'
+import SVGChat from '@/svg/SVGChat.vue'
+import SVGFriends from '@/svg/SVGFriends.vue'
+import SVGSettings from '@/svg/SVGSettings.vue'
+// Components
+import SideBar from '@/components/Window/SideBar.vue'
+import SideBarButton from '@/components/Window/SideBarButton.vue'
+import BorderedWindow from '@/components/Window/BorderedWindow.vue'
+import AnimatedRouterView from '@/components/Window/AnimatedRouterView.vue'
+// PrimeVue
 import { Toast } from 'primevue'
-import BorderedWindow from './components/Window/BorderedWindow.vue'
-import SideBarButton from './components/Window/SideBarButton.vue'
-import SVGSettings from './svg/SVGSettings.vue'
-import AnimatedRouterView from './components/Window/AnimatedRouterView.vue'
-import SideBar from './components/Window/SideBar.vue'
-import SVGIcon from './svg/SVGIcon.vue'
-import SVGFriends from './svg/SVGFriends.vue'
-import SVGChat from './svg/SVGChat.vue'
 </script>
 
 <style>
-@import '@/styles/button.css';
 @import '@/styles/primevue.css';
 
 :root {
+  --title-bar-height: 36px;
+  --scroll-bar-width: 8px;
+
+  --default-border-1: 1px solid #00000016;
+
   --theme-blue--2: #1b88b7;
   --theme-blue--1: #19a5e1;
   --theme-blue: #38bef9;
@@ -80,11 +87,6 @@ import SVGChat from './svg/SVGChat.vue'
   --theme-orange: #f69e0b;
   --theme-orange-1: #fff7ec;
   --theme-orange-2: #fffffb;
-
-  --title-bar-height: 36px;
-  --scroll-bar-width: 8px;
-
-  --default-border-1: 1px solid #00000016;
 }
 
 #app,
@@ -95,9 +97,9 @@ html {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  height: 100%;
-  line-height: 1.6;
-  letter-spacing: 0.6px;
+  width: calc(100vw - 1.5px);
+  height: calc(100vh - 1.5px);
+  letter-spacing: 0.5px;
 }
 
 a {
@@ -211,5 +213,9 @@ textarea {
 
 .gap-8 {
   gap: 8px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 </style>

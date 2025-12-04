@@ -1,17 +1,22 @@
 import { createApp } from 'vue'
-import { router } from './router/index'
 import { createPinia } from 'pinia'
+import { router } from './router/index'
 
 import { scrollActive } from './scripts/ui/scrollActive'
 import { hideWhenZero } from './scripts/ui/hideWhenZero'
 
-import { definePreset } from '@primeuix/themes'
+import Tooltip from 'primevue/tooltip'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
+import { definePreset } from '@primeuix/themes'
 import ToastService from 'primevue/toastservice'
-import Tooltip from 'primevue/tooltip'
 
 import App from './App.vue'
+
+import { IpcServices } from '#/ipc'
+import { createIpcProxy } from 'electron-ipc-decorator/client'
+
+window.api = createIpcProxy<IpcServices>(window.ipcRenderer)!
 
 const PrimeVuePreset = definePreset(Aura, {
   semantic: {
@@ -62,10 +67,52 @@ const PrimeVuePreset = definePreset(Aura, {
         display: inline-flex;
       }`,
     },
+    panel: {
+      css: () => `
+      .p-panel {
+        box-shadow: 0 4px 12px #00000014;
+      }
+
+      .p-panel .p-panel-header:has(.p-panel-header-actions:not(:empty)) {
+        padding: 0.396rem 1.125rem !important;
+      }`,
+    },
+    password: {
+      css: () => `
+      .p-password-mask-icon,
+      .p-password-unmask-icon {
+        cursor: pointer;
+      }`,
+    },
+    select: {
+      list: {
+        header: {
+          padding: '1rem 1rem 0 1rem',
+        },
+      },
+      css: () => `
+      .p-select-label {
+        padding-right: 0 !important;
+      }`,
+    },
     splitter: {
       root: {
         borderColor: 'none',
       },
+    },
+    toast: {
+      css: () => `
+      .p-toast {
+        top: 36px !important;
+      }
+
+      .p-toast-message-icon {
+        margin-top: 1.5px;
+      }
+
+      .p-toast-close-button {
+        top: 3.5px;
+      }`,
     },
   },
 })

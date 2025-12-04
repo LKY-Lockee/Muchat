@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts" name="FriendItem">
+// PrimeVue
 import { Avatar, OverlayBadge } from 'primevue'
 
 const props = defineProps({
@@ -48,34 +49,51 @@ const props = defineProps({
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 0.75rem;
-  gap: 1rem;
-  border-radius: 5px;
   transition: all 0.2s ease-in-out;
 
+  padding: var(--friend-item-padding);
+  gap: var(--friend-item-gap);
+  border-radius: var(--friend-item-border-radius);
+
   &[on='true'] {
-    background-color: var(--p-primary-500);
+    background-color: var(--friend-item-on-bg);
 
     .primary {
       transition: inherit;
-      color: var(--p-primary-0);
+
+      color: var(--friend-item-on-text-color);
     }
   }
 
   &[on='true']:hover {
-    background-color: var(--p-primary-400);
+    background-color: var(--friend-item-on-hover-bg);
   }
 
   &[on='true']:active {
-    background-color: var(--p-primary-600);
+    background-color: var(--friend-item-on-active-bg);
   }
 
   &[on='false']:hover {
-    background-color: var(--p-surface-100);
+    background-color: var(--friend-item-hover-bg);
   }
 
   &[on='false']:active {
-    background-color: var(--p-surface-200);
+    background-color: var(--friend-item-active-bg);
   }
+}
+</style>
+
+<style>
+:root {
+  --friend-item-padding: 0.75rem;
+  --friend-item-gap: 1rem;
+  --friend-item-border-radius: 5px;
+
+  --friend-item-hover-bg: var(--p-surface-100);
+  --friend-item-active-bg: var(--p-surface-200);
+  --friend-item-on-hover-bg: var(--p-primary-400);
+  --friend-item-on-active-bg: var(--p-primary-600);
+  --friend-item-on-bg: var(--p-primary-500);
+  --friend-item-on-text-color: var(--p-primary-0);
 }
 </style>

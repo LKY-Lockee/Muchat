@@ -554,7 +554,7 @@
       fill: var(--think-text);
     }
 
-    &.folded {
+    &.collapsed {
       grid-template-rows: 25px 0fr;
       padding: 8px 8px 7px 8px;
 
