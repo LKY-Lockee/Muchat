@@ -69,8 +69,6 @@ import { Toast } from 'primevue'
 </script>
 
 <style>
-@import '@/styles/primevue.css';
-
 :root {
   --title-bar-height: 36px;
   --scroll-bar-width: 8px;

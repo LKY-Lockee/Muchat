@@ -1,6 +1,7 @@
 import { Reference } from '&/chat'
 import { type Message } from '&/character'
 import Store from 'electron-store'
+import { deepmerge } from 'deepmerge-ts'
 import * as oss from 'mem0ai-nosqlite/oss'
 import { type IpcContext, IpcMethod, IpcService } from 'electron-ipc-decorator'
 
@@ -8,22 +9,20 @@ let memoryConfig: oss.MemoryConfig = {
   embedder: {
     provider: 'openai',
     apiKey: '',
-    baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
-    model: 'text-embedding-v4',
+    baseURL: '',
+    model: '',
     embeddingDims: 2048,
   },
   vectorStore: {
     provider: 'qdrant',
     collectionName: 'memories',
     dimension: 2048,
-    host: 'localhost',
-    port: 6333,
   },
   llm: {
     provider: 'openai',
     apiKey: '',
-    baseURL: 'https://api.deepseek.com',
-    model: 'deepseek-chat',
+    baseURL: '',
+    model: '',
   },
   disableHistory: true,
   historyStore: {
@@ -46,7 +45,9 @@ if (!store.has('memoryConfig')) {
 } else {
   memoryConfig = store.get('memoryConfig') as oss.MemoryConfig
 }
-store.set('customMemoryConfig', '{}')
+if (!store.has('customMemoryConfig')) {
+  store.set('customMemoryConfig', '{}')
+}
 
 let memory = new oss.Memory(memoryConfig)
 
@@ -66,7 +67,7 @@ export class MemoryManagerService extends IpcService {
     this.updateConfig(config)
   }
   updateConfig(config: Partial<oss.MemoryConfig>) {
-    const mergeConfig = { ...memoryConfig, ...config }
+    const mergeConfig = deepmerge(memoryConfig, config)
     memory = new oss.Memory(mergeConfig)
     store.set('memoryConfig', mergeConfig)
   }
@@ -85,7 +86,7 @@ export class MemoryManagerService extends IpcService {
   }
   updateConfigByJSONString(configString: string) {
     const config = JSON.parse(configString) as Partial<oss.MemoryConfig>
-    this.updateConfig(config)
+    this.updateConfig({ ...memoryConfig, ...config })
     store.set('customMemoryConfig', configString)
   }
 

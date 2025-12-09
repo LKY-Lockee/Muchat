@@ -15,6 +15,7 @@
 		"axios": "^1.13.2",
 		"better-sqlite3": "^12.4.6",
 		"bufferutil": "^4.0.9",
+		"deepmerge-ts": "^7.1.5",
 		"electron-ipc-decorator": "^0.2.0",
 		"electron-store": "^11.0.2",
 		"encoding": "^0.1.13",

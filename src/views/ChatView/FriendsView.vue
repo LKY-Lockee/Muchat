@@ -54,7 +54,7 @@
     v-model:visible="showCreateCharacterDialog"
     modal
     :header="characterDialogTitle"
-    :style="{ width: '50rem' }"
+    :style="{ width: '90vw' }"
     :draggable="false"
   >
     <FormView>
@@ -82,6 +82,47 @@
       <Button label="取消" severity="secondary" @click="showCreateCharacterDialog = false" />
       <Button label="确定" @click="confirmCreateCharacter" />
     </template>
+  </Dialog>
+
+  <!-- Memory Viewer Dialog -->
+  <Dialog
+    v-model:visible="showMemoryDialog"
+    modal
+    header="记忆"
+    :style="{ width: '90vw' }"
+    :draggable="false"
+  >
+    <DataTable
+      :value="memoryData"
+      :loading="loadingMemories"
+      scrollable
+      scroll-height="60vh"
+      striped-rows
+      paginator
+      :rows="10"
+      :rows-per-page-options="[10, 25, 50]"
+    >
+      <Column field="id" header="ID" style="min-width: 150px" />
+      <Column field="memory" header="记忆内容" sortable style="min-width: 400px" />
+      <Column field="agentId" header="Agent ID" style="min-width: 150px" />
+      <Column field="userId" header="User ID" sortable style="min-width: 150px" />
+      <Column field="createdAt" header="创建时间" sortable style="min-width: 180px">
+        <template #body="{ data }">
+          <div>{{ formatDate(data.createdAt) }}</div>
+        </template>
+      </Column>
+      <Column field="updatedAt" header="更新时间" sortable style="min-width: 180px">
+        <template #body="{ data }">
+          <div>{{ formatDate(data.updatedAt) }}</div>
+        </template>
+      </Column>
+      <Column field="hash" header="Hash" style="min-width: 50px" />
+      <Column field="metadata" header="元数据" style="min-width: 200px">
+        <template #body="{ data }">
+          <div>{{ formatMetadata(data.metadata) }}</div>
+        </template>
+      </Column>
+    </DataTable>
   </Dialog>
 
   <TitleBarArea>
@@ -120,9 +161,19 @@ import TitleBarSection from '@/components/Window/TitleBarSection.vue'
 // Scripts
 import uuid from '&/utils/uuid'
 import { Character, Topic } from '&/character'
+import { MemoryItem } from 'mem0ai-nosqlite/oss'
 // PrimeVue
 import { MenuItem } from 'primevue/menuitem'
-import { Button, ContextMenu, Dialog, InputText, Textarea, useToast } from 'primevue'
+import {
+  Button,
+  ContextMenu,
+  Dialog,
+  InputText,
+  Textarea,
+  useToast,
+  DataTable,
+  Column,
+} from 'primevue'
 // Pinia
 import { useChatStore } from '@/stores/chat'
 
@@ -139,6 +190,11 @@ const newCharacterForm = ref({
   name: '',
   prompt: '',
 })
+
+// Memory viewer
+const showMemoryDialog = ref(false)
+const memoryData = ref<MemoryItem[]>([])
+const loadingMemories = ref(false)
 
 function createCharacter() {
   newCharacterForm.value = {
@@ -270,11 +326,7 @@ const characterRightMenuItems = ref<MenuItem[]>([
     command: async () => {
       try {
         if (!rightClickedCharacterId) return
-        console.log(
-          await window.api.memoryManager.ipcGetAllMemories({
-            agentId: `default-${rightClickedCharacterId}`,
-          }),
-        )
+        await viewMemories(`default-${rightClickedCharacterId}`)
       } catch (error) {
         toast.add({
           severity: 'error',
@@ -311,9 +363,7 @@ const topicRightMenuItems = ref([
     command: async () => {
       try {
         if (!rightClickedTopicId) return
-        console.log(
-          await window.api.memoryManager.ipcGetAllMemories({ agentId: rightClickedTopicId }),
-        )
+        await viewMemories(rightClickedTopicId)
       } catch (error) {
         toast.add({
           severity: 'error',
@@ -351,6 +401,43 @@ const topicRightMenuItems = ref([
     },
   },
 ])
+
+async function viewMemories(agentId: string) {
+  loadingMemories.value = true
+  showMemoryDialog.value = true
+  memoryData.value = []
+
+  try {
+    const result = await window.api.memoryManager.ipcGetAllMemories({ agentId })
+    memoryData.value = result.results || []
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: '加载记忆失败',
+      detail: (error as Error).message,
+    })
+  } finally {
+    loadingMemories.value = false
+  }
+}
+
+function formatDate(timestamp: number | string) {
+  if (!timestamp) return '-'
+  const date = new Date(timestamp)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+}
+
+function formatMetadata(metadata: Record<string, unknown> | null | undefined) {
+  if (!metadata) return '-'
+  return JSON.stringify(metadata, null, 2)
+}
 
 function onCharacterRightClick(event: MouseEvent, characterId: string) {
   rightClickedCharacterId = characterId

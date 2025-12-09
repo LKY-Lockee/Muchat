@@ -79,6 +79,10 @@ const PrimeVuePreset = definePreset(Aura, {
     },
     password: {
       css: () => `
+      .p-password input {
+        width: 100%;
+      }
+
       .p-password-mask-icon,
       .p-password-unmask-icon {
         cursor: pointer;

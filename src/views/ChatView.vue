@@ -12,7 +12,7 @@
             {{ chatStore.getCurrentCharacter.name }}
           </span>
           <span v-if="!isDefaultTopic" class="topic_name">
-            : {{ chatStore.getCurrentTopic.name ?? chatStore.getCurrentTopic.id }}
+            {{ chatStore.getCurrentTopic.name ?? chatStore.getCurrentTopic.id }}
           </span>
         </div>
         <Select
@@ -155,7 +155,7 @@ const models = await window.api.providerManager.ipcGetAllModels()
 const providersWithModels = providers.map((provider) => {
   return {
     ...provider,
-    models: models.filter((model) => model.provider === provider.id),
+    models: models.filter((model) => model.provider === provider.id).filter((model) => model.type === 'chat'),
   }
 })
 
@@ -329,7 +329,7 @@ watch(currentModel, (newModel) => {
   & .character_name {
     font-size: 1.25rem;
     font-weight: bold;
-    padding-right: 2px;
+    padding-right: 5px;
   }
 
   & .topic_name {

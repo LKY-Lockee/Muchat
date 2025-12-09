@@ -240,14 +240,14 @@
             <FormView>
               <FormField>
                 <label for="customPrompt">自定义提示词</label>
-                <Textarea id="customPrompt" />
+                <Textarea id="customPrompt" v-model="memorySettings.customPrompt" rows="10" />
               </FormField>
             </FormView>
           </Panel>
           <Panel header="高级设置" toggleable>
             <FormView>
               <FormField>
-                <Textarea id="customConfig" v-model="advancedMemorySettings" />
+                <Textarea id="customConfig" v-model="advancedMemorySettings" rows="10" />
               </FormField>
             </FormView>
             <template #footer>
@@ -272,7 +272,7 @@
     v-model:visible="showAdvancedSettingsDialog"
     modal
     header="高级设置"
-    :style="{ width: '60rem' }"
+    :style="{ height: '85vh', width: '90vw' }"
     :draggable="false"
   >
     <MarkdownArea :markdown="advancedSettingsHelp" />
@@ -421,6 +421,13 @@ const advancedMemorySettings = ref<string>(
 function applyAdvancedMemorySettings() {
   window.api.memoryManager
     .ipcUpdateConfigByJSONString(advancedMemorySettings.value)
+    .then(() => {
+      toast.add({
+        severity: 'success',
+        summary: '应用成功',
+        life: 2000,
+      })
+    })
     .catch((error) => {
       toast.add({
         severity: 'error',
